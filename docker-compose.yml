@@ -1,0 +1,26 @@
+services:
+  lead-hub:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lead_hub
+    restart: unless-stopped
+    environment:
+      PORT: 4100
+      SESSION_SECRET: abmix-lead-hub-2026-a8f31c9d7e4b52f6c1d90ab347ef82cd
+      LEAD_INGEST_TOKEN: abmix-lead-hub-2026-bradesco-sync
+      VIRTUAL_HOST: lead.abmix.tech
+      VIRTUAL_PORT: 4100
+      LETSENCRYPT_HOST: lead.abmix.tech
+      LETSENCRYPT_EMAIL: felipe.manieri@abmix.tech
+    volumes:
+      - ./data:/app/data
+      - ./seed-config.json:/app/seed-config.json
+    networks:
+      - internal
+      - stack_nginx-proxy
+
+networks:
+  internal:
+  stack_nginx-proxy:
+    external: true

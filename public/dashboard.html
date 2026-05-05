@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABMIX | Painel Comercial</title>
+  <meta name="description" content="Painel comercial interno ABMIX — carteira de leads, filtros e acompanhamento de tratativas." />
+  <link rel="stylesheet" href="/assets/app.css" />
+</head>
+<body>
+  <main class="workspace">
+
+    <!-- ── HEADER ─────────────────────────── -->
+    <header class="masthead compact">
+      <div class="masthead-brand only-logo">
+        <img src="/brand/logo.png" alt="ABMIX" class="brand-logo hero-logo" />
+      </div>
+
+      <div class="masthead-side">
+        <div class="user-badge">
+          <strong id="userMeta"></strong>
+          <span id="todayStamp"></span>
+        </div>
+        <div class="toolbar-actions">
+          <button id="refreshBtn" type="button" class="secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-right:6px"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Atualizar
+          </button>
+          <button id="exportBtn" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-2px;margin-right:6px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exportar Excel
+          </button>
+          <button id="logoutBtn" type="button" class="ghost dark">Sair</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── FILTROS ─────────────────────────── -->
+    <section class="filters-panel">
+      <div class="filters-grid">
+        <label>
+          <span>Operadora</span>
+          <select id="operatorFilter"></select>
+        </label>
+        <label>
+          <span>Status</span>
+          <select id="statusFilter"></select>
+        </label>
+        <label class="search-field">
+          <span>Buscar lead</span>
+          <input id="searchFilter" type="text" placeholder="Nome, telefone ou e-mail…" />
+        </label>
+      </div>
+    </section>
+
+    <!-- ── CARDS RESUMO ─────────────────────── -->
+    <section id="summaryGrid" class="summary-grid"></section>
+
+    <!-- ── LISTA DE LEADS ──────────────────── -->
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Carteira de leads</h2>
+          <p class="panel-subtitle" id="resultCount"></p>
+        </div>
+      </div>
+      <section id="leadGrid" class="lead-grid"></section>
+    </section>
+
+  </main>
+
+  <!-- ── TEMPLATES ───────────────────────── -->
+
+  <template id="summaryCardTemplate">
+    <article class="summary-card">
+      <p class="summary-label"></p>
+      <strong class="summary-value"></strong>
+    </article>
+  </template>
+
+  <template id="masterLeadTemplate">
+    <article class="master-row">
+      <div class="master-row-main">
+        <div class="master-row-title">
+          <h3 data-field="nome"></h3>
+          <div class="master-badges">
+            <span data-field="operadora" class="operator-pill"></span>
+            <span data-field="status"    class="status-pill"></span>
+          </div>
+        </div>
+        <div class="master-row-grid">
+          <div><span class="readonly-label">Vendedor</span><strong data-field="assignedSellerName"></strong></div>
+          <div><span class="readonly-label">Telefone</span><strong data-field="telefone"></strong></div>
+          <div><span class="readonly-label">Cidade</span><strong data-field="cidade"></strong></div>
+          <div><span class="readonly-label">Atualizado em</span><strong data-field="updatedAt"></strong></div>
+        </div>
+      </div>
+      <div class="master-row-action">
+        <button type="button" class="ghost dark toggle-details">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:5px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Visualizar
+        </button>
+      </div>
+      <div class="master-row-detail is-collapsed">
+        <div class="master-detail-grid">
+          <div><span class="readonly-label">E-mail</span><strong data-field="email"></strong></div>
+          <div><span class="readonly-label">Data de nascimento</span><strong data-field="dataNascimento"></strong></div>
+          <div><span class="readonly-label">Número de vidas</span><strong data-field="numeroVidas"></strong></div>
+          <div><span class="readonly-label">CNPJ/MEI</span><strong data-field="cnpj"></strong></div>
+          <div><span class="readonly-label">Entrada em</span><strong data-field="createdAt"></strong></div>
+        </div>
+        <div class="timeline-block">
+          <span class="readonly-label">Observações do formulário</span>
+          <p class="timeline-note" data-field="observacoes"></p>
+        </div>
+        <div class="timeline-block">
+          <span class="readonly-label">Última observação interna</span>
+          <p class="timeline-note" data-field="lastNote"></p>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <template id="vendorLeadTemplate">
+    <article class="lead-card">
+      <header class="lead-card-head">
+        <div>
+          <div class="lead-topline">
+            <span data-field="operadora" class="operator-pill"></span>
+            <span data-field="status"    class="status-pill"></span>
+          </div>
+          <h3 data-field="nome"></h3>
+          <p data-field="assignedSellerName" class="lead-owner"></p>
+        </div>
+        <p data-field="createdAt" class="lead-created"></p>
+      </header>
+
+      <div class="lead-body">
+        <dl class="lead-meta">
+          <div><dt>Telefone</dt><dd data-field="telefone"></dd></div>
+          <div><dt>E-mail</dt><dd data-field="email"></dd></div>
+          <div><dt>Cidade</dt><dd data-field="cidade"></dd></div>
+          <div><dt>Data de nascimento</dt><dd data-field="dataNascimento"></dd></div>
+          <div><dt>Número de vidas</dt><dd data-field="numeroVidas"></dd></div>
+          <div><dt>CNPJ/MEI</dt><dd data-field="cnpj"></dd></div>
+        </dl>
+
+        <div class="lead-note-block">
+          <p class="meta-caption">Observações do formulário</p>
+          <p class="lead-note" data-field="observacoes"></p>
+        </div>
+      </div>
+
+      <section class="followup-panel">
+        <div class="followup-head">
+          <p class="meta-caption">Atualização da tratativa</p>
+          <p class="followup-copy">Atualize o status e registre observações internas da negociação.</p>
+        </div>
+        <form class="update-form">
+          <div class="update-grid">
+            <label>
+              <span>Status da tratativa</span>
+              <select name="status"></select>
+            </label>
+            <label class="full-width">
+              <span>Observação interna</span>
+              <textarea name="note" rows="3" placeholder="Ex: cliente pediu retorno amanhã às 14h"></textarea>
+            </label>
+          </div>
+          <div class="update-foot">
+            <p class="updated-at" data-field="updatedAt"></p>
+            <button type="submit">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:6px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Salvar atualização
+            </button>
+          </div>
+        </form>
+      </section>
+    </article>
+  </template>
+
+  <script src="/assets/dashboard.js"></script>
+</body>
+</html>

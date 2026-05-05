@@ -1,0 +1,25 @@
+{
+  "masters": [
+    {
+      "name": "Michelle",
+      "email": "michelle@abmix.com.br",
+      "password": "Fe120784!"
+    },
+    {
+      "name": "Felipe",
+      "email": "felipe@abmix.com.br",
+      "password": "Fe120784!"
+    }
+  ],
+  "vendors": [
+    { "name": "Bruna Garcia",      "email": "bruna.garcia@abmix.com",      "password": "Abmix@2026" },
+    { "name": "Fabiana Godinho",   "email": "fabiana.godinho@abmix.com",   "password": "Abmix@2026" },
+    { "name": "Fernanda Batista",  "email": "fernanda.batista@abmix.com",  "password": "Abmix@2026" },
+    { "name": "Isabela Velasquez", "email": "isabela.velasquez@abmix.com", "password": "Abmix@2026" },
+    { "name": "Isak Rocha",        "email": "isak.rocha@abmix.com",        "password": "Abmix@2026" },
+    { "name": "Juliana Araujo",    "email": "juliana.araujo@abmix.com",    "password": "Abmix@2026" },
+    { "name": "Luciana Velasquez", "email": "luciana.velasquez@abmix.com", "password": "Abmix@2026" },
+    { "name": "Sara Mattos",       "email": "sara.mattos@abmix.com",       "password": "Abmix@2026" },
+    { "name": "Monique Silva",     "email": "monique.silva@abmix.com",     "password": "Abmix@2026" }
+  ]
+}
