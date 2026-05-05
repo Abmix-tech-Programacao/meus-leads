@@ -8,6 +8,8 @@ RUN npm ci --omit=dev
 COPY public ./public
 COPY src ./src
 COPY seed-config.json ./seed-config.json
+COPY logo.jpg ./logo.jpg
+COPY logo-transparente.png ./logo-transparente.png
 
 RUN mkdir -p /app/data
 
