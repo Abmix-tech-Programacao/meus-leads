@@ -9,6 +9,11 @@
       "name": "Felipe",
       "email": "felipe@abmix.com.br",
       "password": "Fe120784!"
+    },
+    {
+      "name": "Supervisão",
+      "email": "supervisao@abmix.com.br",
+      "password": "Rodrigo@2026"
     }
   ],
   "vendors": [
