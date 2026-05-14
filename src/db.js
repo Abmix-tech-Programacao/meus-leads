@@ -104,7 +104,13 @@ function findUserById(id) {
 }
 
 function findVendorBySellerName(name) {
-  return db.prepare("SELECT * FROM users WHERE role = 'vendor' AND seller_slug = ? AND active = 1").get(normalizeSellerName(name));
+  return db.prepare(`
+    SELECT *
+    FROM users
+    WHERE role = 'vendor' AND seller_slug = ? AND active = 1
+    ORDER BY id DESC
+    LIMIT 1
+  `).get(normalizeSellerName(name));
 }
 
 function createUser({ name, email, passwordHash, role, sellerName = null }) {

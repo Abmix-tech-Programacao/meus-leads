@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { initDb, findUserByEmail, createUser } = require("./db");
+const { db, initDb, findUserByEmail, createUser, normalizeSellerName } = require("./db");
 const { hashPassword } = require("./auth");
 const { seedPath } = require("./config");
 
@@ -23,7 +23,28 @@ async function bootstrap() {
   }
 
   for (const vendor of seed.vendors || []) {
-    if (!findUserByEmail(vendor.email)) {
+    const existingByEmail = findUserByEmail(vendor.email);
+    if (existingByEmail) {
+      continue;
+    }
+
+    const sellerSlug = normalizeSellerName(vendor.name);
+    const existingBySlug = db.prepare(`
+      SELECT id
+      FROM users
+      WHERE role = 'vendor' AND seller_slug = ? AND active = 1
+      ORDER BY id DESC
+      LIMIT 1
+    `).get(sellerSlug);
+
+    if (existingBySlug) {
+      const passwordHash = await hashPassword(vendor.password);
+      db.prepare(`
+        UPDATE users
+        SET name = ?, email = ?, password_hash = ?, seller_name = ?, seller_slug = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(vendor.name, vendor.email, passwordHash, vendor.name, sellerSlug, existingBySlug.id);
+    } else {
       await createUser({
         name: vendor.name,
         email: vendor.email,
